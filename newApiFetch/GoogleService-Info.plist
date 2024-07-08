@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyDsjGQkMgvOJcNfwIBlrylJnrzsGLjUCkU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>913838998020</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>bhati.BibloFi-Librarian</string>
+	<key>PROJECT_ID</key>
+	<string>bibliofi-89069</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bibliofi-89069.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:913838998020:ios:e9982df6c329ae8235ab51</string>
+</dict>
+</plist>
