@@ -1657,16 +1657,32 @@
 //
 
 import SwiftUI
-import SwiftUI
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-struct booksDetails : Identifiable{
-    var id: ObjectIdentifier?
-    
-    var author : String
-    var title : String
+struct Book: Identifiable, Codable {
+    @DocumentID var id: String?
+    var title: String
+    var count: String
+    var description: String?
+    var authors: [String]?
+    var imageLinks: ImageLinksCustom?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case count
+        case description
+        case authors
+        case imageLinks
+    }
 }
+
+struct ImageLinksCustom: Codable {
+    var smallThumbnail: String?
+    var thumbnail: String?
+}
+
 
 struct ContentView: View {
     @State private var selection: Int? = 1
@@ -1719,10 +1735,12 @@ struct AnnouncementView: View {
     }
 }
 
+import FirebaseFirestore
+import FirebaseFirestoreSwift
+
 struct BooksView: View {
-    @State private var image1 : UIImage? = UIImage(named: "1")!
-    @State private var books : [booksDetails] = []
-    
+    @ObservedObject var viewModel = BooksViewModel()
+
     var body: some View {
         VStack(alignment: .leading, spacing: 30) {
             HStack {
@@ -1735,117 +1753,87 @@ struct BooksView: View {
             }
             .padding(.horizontal, 30)
             
-            // My Books Section
+            HStack {
+                Spacer()
+                    .frame(width: 90)
+                Text("Book title")
+                    .font(.custom("Avenir Next", size: 18))
+                    .frame(width: 150, alignment: .leading )
+                Spacer()
+                    .frame(width: 70)
+                Text("No. Of Copies or count")
+                    .font(.custom("Avenir Next", size: 18))
+                    .frame(width: 200, alignment: .leading)
+//                Spacer()
+//                    .frame(width: 70)
+//                Text("Thumbnail")
+//                    .font(.custom("Avenir Next", size: 18))
+//                    .frame(width: 100, alignment: .leading)
+            }
+            .padding(.horizontal, 30)
+            .padding(.vertical, 10)
             
-//            Text("My Books")
-//                .font(.title2)
-//                .bold()
-//                .padding(.horizontal)
-//            
-//            ScrollView(.horizontal, showsIndicators: false) {
-//                HStack(spacing: 20) {
-//                    ForEach(0..<6) { index in
-//                        VStack(alignment: .leading) {
-//                            Image(uiImage: image1!)
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fill)
-//                                .frame(width: 100, height: 140)
-//                                .cornerRadius(10)
-//                            Text("Book Title")
-//                                .font(.headline)
-//                            Text("By Author")
-//                                .font(.subheadline)
-//                                .foregroundColor(.gray)
-//                        }
-//                    }
-//                }
-//                .padding(.horizontal)
-//            }
-            .onAppear(){
-                fetchCourses()
-            }
-            HStack{
-                Text("Book Author")
-                    .font(.custom("Avenir Next", size: 25))
-                    .fontWeight(.bold)
-                    .foregroundColor(Color(hex: "5D4037"))
-                    .padding(.leading , 90)
-                Text("Book Title")
-                    .font(.custom("Avenir Next", size: 25))
-                    .fontWeight(.bold)
-                    .foregroundColor(Color(hex: "5D4037"))
-                    .padding(.leading , 110)
-            }
-            ScrollView {
-                VStack(spacing: 20) {
-                    ForEach(books) { book in
-                        HStack {
-                            Text(book.author)
-                                .frame(width: 250, alignment: .center)
-                            Text(book.title)
-                                .frame(width: 250, alignment: .center)
+            List(viewModel.books) { book in
+                HStack {
+                    if let urlString = book.imageLinks?.thumbnail, let url = URL(string: urlString) {
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .empty:
+                                ProgressView()
+                            case .success(let image):
+                                image.resizable()
+                                    .scaledToFit()
+                                    .frame(width: 50, height: 50)
+                            case .failure:
+                                Image(systemName: "photo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 50, height: 50)
+                            @unknown default:
+                                Image(systemName: "photo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 50, height: 50)
+                            }
                         }
-                        
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .shadow(color: Color.gray.opacity(0.4), radius: 5, x: 0, y: 2)
+                    } else {
+                        Image(systemName: "photo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
                     }
+                    Spacer()
+                        .frame(width: 30)
+                    Text(book.title)
+                        .font(.custom("Avenir Next", size: 18))
+                        .frame(width: 150, alignment: .leading)
+                    Spacer()
+                        .frame(width: 70)
+                    Text(book.count)
+                        .font(.custom("Avenir Next", size: 18))
+                        .frame(width: 200, alignment: .leading)
+                    Spacer()
+                        .frame(width: 70)
+                    
                 }
                 .padding(.horizontal, 30)
+                .padding(.vertical, 10)
             }
         }
         .padding(.top, 20)
         .background(Color(hex: "FDF5E6"))
         .edgesIgnoringSafeArea(.all)
-    }
-    
-    func loadImage(from url: URL) {
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                guard let data = data, error == nil else {
-                    print("Failed to load image from \(url): \(error?.localizedDescription ?? "Unknown error")")
-                    return
-                }
-                DispatchQueue.main.async {
-                    self.image1 = UIImage(data: data)!
-                }
-            }.resume()
-        }
-    
-    func fetchCourses() {
-        let db = Firestore.firestore()
-        db.collection("Books").getDocuments { snapshot, error in
-            if let error = error {
-                print("Error fetching documents: \(error)")
-            } else {
-                books = snapshot?.documents.compactMap { doc in
-                    let data = doc.data()
-                    print("kkkkk")
-                    var author = data["authors"] as! [String]
-                    return booksDetails(author: author[0] , title: data["title"] as! String)
-                } as! [booksDetails]
-                print(books)
-//                loadImage(from: URL(string: books[0])!)
-            }
+        .onAppear {
+            viewModel.fetchBooks()
         }
     }
-    
 }
+
 struct Request: Identifiable {
     let id: String
     let studentName: String
     let issuedBook: String
 }
-
-let sampleData = [
-    
-    Request(id: "A10", studentName: "Anuj Singh", issuedBook: "The Metropolis"),
-    Request(id: "A97", studentName: "Nikunj Tyagi", issuedBook: "Harry Potter"),
-    Request(id: "A977", studentName: "Vineet", issuedBook: "Harry Potter"),
-    Request(id: "A7", studentName: "Akshat", issuedBook: "Harry Potter"),
-    Request(id: "A09", studentName: "Sameer Bhati", issuedBook: "Alchemist"),
-    Request(id: "A10", studentName: "Akshat Bhati", issuedBook: "Rich Dad Poor Dad")
-]
 
 extension Color {
     init(hex: String) {

@@ -15,6 +15,7 @@
 		0995C23A2C3C0C700049454E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0995C2392C3C0C700049454E /* FirebaseAuth */; };
 		0995C23C2C3C0C700049454E /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 0995C23B2C3C0C700049454E /* FirebaseAuthCombine-Community */; };
 		0995C23E2C3C10ED0049454E /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0995C23D2C3C10ED0049454E /* AuthenticationManager.swift */; };
+		0995C2692C3C81C70049454E /* BookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0995C2682C3C81C70049454E /* BookViewModel.swift */; };
 		09AA3E092C395F3B0018C8B5 /* newApiFetchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AA3E082C395F3B0018C8B5 /* newApiFetchApp.swift */; };
 		09AA3E0B2C395F3B0018C8B5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AA3E0A2C395F3B0018C8B5 /* ContentView.swift */; };
 		09AA3E0D2C395F3D0018C8B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09AA3E0C2C395F3D0018C8B5 /* Assets.xcassets */; };
@@ -33,6 +34,7 @@
 		0995C2302C3C0B1C0049454E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		0995C2332C3C0B5F0049454E /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		0995C23D2C3C10ED0049454E /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
+		0995C2682C3C81C70049454E /* BookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewModel.swift; sourceTree = "<group>"; };
 		09AA3E052C395F3B0018C8B5 /* newApiFetch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newApiFetch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		09AA3E082C395F3B0018C8B5 /* newApiFetchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newApiFetchApp.swift; sourceTree = "<group>"; };
 		09AA3E0A2C395F3B0018C8B5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 				09AA3E0A2C395F3B0018C8B5 /* ContentView.swift */,
 				09AA3E162C395F600018C8B5 /* fetchBooks.swift */,
 				09AA3E0C2C395F3D0018C8B5 /* Assets.xcassets */,
+				0995C2682C3C81C70049454E /* BookViewModel.swift */,
 				0995C22E2C3BFD8E0049454E /* GoogleService-Info.plist */,
 				09AA3E0E2C395F3D0018C8B5 /* Preview Content */,
 				09AA3E3D2C39D6F60018C8B5 /* FireStoreService.swift */,
@@ -203,6 +206,7 @@
 				0995C2312C3C0B1C0049454E /* LoginView.swift in Sources */,
 				0995C23E2C3C10ED0049454E /* AuthenticationManager.swift in Sources */,
 				09AA3E0B2C395F3B0018C8B5 /* ContentView.swift in Sources */,
+				0995C2692C3C81C70049454E /* BookViewModel.swift in Sources */,
 				09AA3E3E2C39D6F60018C8B5 /* FireStoreService.swift in Sources */,
 				09AA3E092C395F3B0018C8B5 /* newApiFetchApp.swift in Sources */,
 				4410BE232C3B02D60075AEEE /* HomeView.swift in Sources */,
