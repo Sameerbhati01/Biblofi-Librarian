@@ -1659,6 +1659,7 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import UniformTypeIdentifiers
 
 struct Book: Identifiable, Codable {
     @DocumentID var id: String?
@@ -1735,8 +1736,24 @@ struct AnnouncementView: View {
     }
 }
 
-import FirebaseFirestore
-import FirebaseFirestoreSwift
+class BooksViewModel: ObservableObject {
+    @Published var books = [Book]()
+
+    func fetchBooks() {
+        let db = Firestore.firestore()
+        db.collection("Books").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                if let querySnapshot = querySnapshot {
+                    self.books = querySnapshot.documents.compactMap { document -> Book? in
+                        try? document.data(as: Book.self)
+                    }
+                }
+            }
+        }
+    }
+}
 
 struct BooksView: View {
     @ObservedObject var viewModel = BooksViewModel()
@@ -1829,12 +1846,6 @@ struct BooksView: View {
     }
 }
 
-struct Request: Identifiable {
-    let id: String
-    let studentName: String
-    let issuedBook: String
-}
-
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -1865,7 +1876,7 @@ struct ResourceView: View {
 
     var body: some View {
         VStack {
-            TextField("Search for books", text: $searchText, onCommit: {
+            TextField("Search for books or ISBN", text: $searchText, onCommit: {
                 viewModel.fetchBooks(query: searchText)
             })
             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -1874,7 +1885,7 @@ struct ResourceView: View {
             List(viewModel.books, id: \.id) { book in
                 NavigationLink(destination: BookDetailView(book: book, selection: $selection)) {
                     HStack {
-                        if let url = URL(string: book.volumeInfo.imageLinks.smallThumbnail) {
+                        if let url = URL(string: book.volumeInfo.imageLinks.thumbnail) {
                             AsyncImage(url: url) { phase in
                                 if let image = phase.image {
                                     image
@@ -1906,9 +1917,6 @@ struct ResourceView: View {
         .navigationTitle("Resource")
     }
 }
-import SwiftUI
-import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 struct BookDetailView: View {
     var book: Item
@@ -2014,7 +2022,11 @@ struct BookDetailView: View {
 }
 
 
-// Google Books API structures
+
+
+import Foundation
+import Combine
+
 struct BookResponse2: Codable {
     let kind: String
     let totalItems: Int
@@ -2029,7 +2041,6 @@ struct Item: Codable {
     let saleInfo: SaleInfo
     let accessInfo: AccessInfo
     let searchInfo: SearchInfo
-    // var bookCount: Int = 0
 }
 
 struct AccessInfo: Codable {
@@ -2201,3 +2212,191 @@ struct PanelizationSummary: Codable {
     ContentView()
 }
 
+
+// Google Books API structures
+//struct BookResponse2: Codable {
+//    let kind: String
+//    let totalItems: Int
+//    let items: [Item]
+//}
+//
+//struct Item: Codable {
+//    let kind: String
+//    let id, etag: String
+//    let selfLink: String
+//    let volumeInfo: VolumeInfo
+//    let saleInfo: SaleInfo
+//    let accessInfo: AccessInfo
+//    let searchInfo: SearchInfo
+//    // var bookCount: Int = 0
+//}
+//
+//struct AccessInfo: Codable {
+//    let country: String
+//    let viewability: String
+//    let embeddable, publicDomain: Bool
+//    let textToSpeechPermission: String
+//    let epub: Epub
+//    let pdf: PDF
+//    let webReaderLink: String
+//    let accessViewStatus: String
+//    let quoteSharingAllowed: Bool
+//}
+//
+//struct Epub: Codable {
+//    let isAvailable: Bool
+//}
+//
+//struct PDF: Codable {
+//    let isAvailable: Bool
+//    let acsTokenLink: String?
+//}
+//
+//struct SaleInfo: Codable {
+//    let country: String
+//    let isEbook: Bool
+//}
+//
+//struct SearchInfo: Codable {
+//    let textSnippet: String
+//}
+//
+//struct VolumeInfo: Codable {
+//    let title: String
+//    let authors: [String]
+//    let publisher: String?
+//    let publishedDate: String
+//    let description: String?
+//    let industryIdentifiers: [IndustryIdentifier]
+//    let readingModes: ReadingModes
+//    let pageCount: Int?
+//    let printType: String
+//    let categories: [String]?
+//    let averageRating: Double?
+//    let ratingsCount: Int?
+//    let maturityRating: String
+//    let allowAnonLogging: Bool
+//    let contentVersion: String
+//    let panelizationSummary: PanelizationSummary
+//    let imageLinks: ImageLinks
+//    let language: String
+//    let previewLink, infoLink: String
+//    let canonicalVolumeLink: String
+//    let subtitle: String?
+//
+//    init(from decoder: any Decoder) throws {
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+//        self.title = try container.decode(String.self, forKey: .title)
+//        self.authors = try container.decode([String].self, forKey: .authors)
+//        self.publisher = try container.decodeIfPresent(String.self, forKey: .publisher)
+//        self.publishedDate = try container.decode(String.self, forKey: .publishedDate)
+//        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+//        self.industryIdentifiers = try container.decode([IndustryIdentifier].self, forKey: .industryIdentifiers)
+//        self.readingModes = try container.decode(ReadingModes.self, forKey: .readingModes)
+//        self.pageCount = try container.decodeIfPresent(Int.self, forKey: .pageCount)
+//        self.printType = try container.decode(String.self, forKey: .printType)
+//        self.categories = try container.decodeIfPresent([String].self, forKey: .categories)
+//        self.averageRating = try container.decodeIfPresent(Double.self, forKey: .averageRating)
+//        self.ratingsCount = try container.decodeIfPresent(Int.self, forKey: .ratingsCount)
+//        self.maturityRating = try container.decode(String.self, forKey: .maturityRating)
+//        self.allowAnonLogging = try container.decode(Bool.self, forKey: .allowAnonLogging)
+//        self.contentVersion = try container.decode(String.self, forKey: .contentVersion)
+//        self.panelizationSummary = try container.decode(PanelizationSummary.self, forKey: .panelizationSummary)
+//        self.imageLinks = try container.decode(ImageLinks.self, forKey: .imageLinks)
+//        self.language = try container.decode(String.self, forKey: .language)
+//        self.previewLink = try container.decode(String.self, forKey: .previewLink)
+//        self.infoLink = try container.decode(String.self, forKey: .infoLink)
+//        self.canonicalVolumeLink = try container.decode(String.self, forKey: .canonicalVolumeLink)
+//        self.subtitle = try container.decodeIfPresent(String.self, forKey: .subtitle)
+//    }
+//
+//    enum CodingKeys: CodingKey {
+//        case title
+//        case authors
+//        case publisher
+//        case publishedDate
+//        case description
+//        case industryIdentifiers
+//        case readingModes
+//        case pageCount
+//        case printType
+//        case categories
+//        case averageRating
+//        case ratingsCount
+//        case maturityRating
+//        case allowAnonLogging
+//        case contentVersion
+//        case panelizationSummary
+//        case imageLinks
+//        case language
+//        case previewLink
+//        case infoLink
+//        case canonicalVolumeLink
+//        case subtitle
+//    }
+//
+//    func encode(to encoder: any Encoder) throws {
+//        var container = encoder.container(keyedBy: CodingKeys.self)
+//        try container.encode(self.title, forKey: .title)
+//        try container.encode(self.authors, forKey: .authors)
+//        try container.encodeIfPresent(self.publisher, forKey: .publisher)
+//        try container.encode(self.publishedDate, forKey: .publishedDate)
+//        try container.encodeIfPresent(self.description, forKey: .description)
+//        try container.encode(self.industryIdentifiers, forKey: .industryIdentifiers)
+//        try container.encode(self.readingModes, forKey: .readingModes)
+//        try container.encodeIfPresent(self.pageCount, forKey: .pageCount)
+//        try container.encode(self.printType, forKey: .printType)
+//        try container.encodeIfPresent(self.categories, forKey: .categories)
+//        try container.encodeIfPresent(self.averageRating, forKey: .averageRating)
+//        try container.encodeIfPresent(self.ratingsCount, forKey: .ratingsCount)
+//        try container.encode(self.maturityRating, forKey: .maturityRating)
+//        try container.encode(self.allowAnonLogging, forKey: .allowAnonLogging)
+//        try container.encode(self.contentVersion, forKey: .contentVersion)
+//        try container.encode(self.panelizationSummary, forKey: .panelizationSummary)
+//        try container.encode(self.imageLinks, forKey: .imageLinks)
+//        try container.encode(self.language, forKey: .language)
+//        try container.encode(self.previewLink, forKey: .previewLink)
+//        try container.encode(self.infoLink, forKey: .infoLink)
+//        try container.encode(self.canonicalVolumeLink, forKey: .canonicalVolumeLink)
+//        try container.encodeIfPresent(self.subtitle, forKey: .subtitle)
+//    }
+//}
+//
+//struct ImageLinks: Codable {
+//    let smallThumbnail, thumbnail: String
+//
+//    init(from decoder: any Decoder) throws {
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+//        self.smallThumbnail = try container.decode(String.self, forKey: .smallThumbnail)
+//        self.thumbnail = try container.decode(String.self, forKey: .thumbnail)
+//    }
+//
+//    enum CodingKeys: CodingKey {
+//        case smallThumbnail
+//        case thumbnail
+//    }
+//
+//    func encode(to encoder: any Encoder) throws {
+//        var container = encoder.container(keyedBy: CodingKeys.self)
+//        try container.encode(self.smallThumbnail, forKey: .smallThumbnail)
+//        try container.encode(self.thumbnail, forKey: .thumbnail)
+//    }
+//}
+//
+//struct IndustryIdentifier: Codable {
+//    let type: String
+//    let identifier: String
+//}
+//
+//struct ReadingModes: Codable {
+//    let text, image: Bool
+//}
+//
+//struct PanelizationSummary: Codable {
+//    let containsEpubBubbles, containsImageBubbles: Bool
+//}
+//
+//#Preview {
+//    ContentView()
+//}
+//
