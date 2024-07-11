@@ -31,23 +31,26 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   }
 }
 
+
+class LoginViewModel: ObservableObject {
+    @Published var isLoggedIn: Bool = false
+}
+
 @main
 struct YourApp: App {
   // register app delegate for Firebase setup
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
-    @State private var isLoggedIn = false
+  @StateObject private var loginModel = LoginViewModel()
 
   var body: some Scene {
     WindowGroup {
-
             Group {
-                if isLoggedIn {
-                    NavigationView {
-                      ContentView()
-                    }
+                if loginModel.isLoggedIn {
+                    ContentView()
                 } else {
                     LoginView()
+                        .environmentObject(loginModel)
                 }
             }.onAppear {
                 checkSignInStatus()
@@ -56,7 +59,7 @@ struct YourApp: App {
     }
   }
     private func checkSignInStatus() {
-        isLoggedIn = UserDefaults.standard.bool(forKey: "isUserSignedIn")
+        loginModel.isLoggedIn = UserDefaults.standard.bool(forKey: "isUserSignedIn")
     }
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08371B0F2C3D0AEA004F6E8B /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08371B0E2C3D0AEA004F6E8B /* Color.swift */; };
 		0995C22F2C3BFD8E0049454E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0995C22E2C3BFD8E0049454E /* GoogleService-Info.plist */; };
 		0995C2312C3C0B1C0049454E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0995C2302C3C0B1C0049454E /* LoginView.swift */; };
 		0995C2342C3C0B5F0049454E /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0995C2332C3C0B5F0049454E /* Global.swift */; };
@@ -25,11 +26,14 @@
 		09AA3E3A2C39C2550018C8B5 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 09AA3E392C39C2550018C8B5 /* FirebaseFirestoreSwift */; };
 		09AA3E3C2C39C2550018C8B5 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 09AA3E3B2C39C2550018C8B5 /* FirebaseStorage */; };
 		09AA3E3E2C39D6F60018C8B5 /* FireStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AA3E3D2C39D6F60018C8B5 /* FireStoreService.swift */; };
+		2FEFD9BF2C3CEB3A00B90B77 /* Requests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEFD9BE2C3CEB3A00B90B77 /* Requests.swift */; };
+		2FEFD9C12C3CEBA200B90B77 /* LibrarianRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEFD9C02C3CEBA200B90B77 /* LibrarianRequestView.swift */; };
 		4410BE232C3B02D60075AEEE /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4410BE222C3B02D60075AEEE /* HomeView.swift */; };
 		4410BE252C3B03960075AEEE /* ProfilePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4410BE242C3B03960075AEEE /* ProfilePage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		08371B0E2C3D0AEA004F6E8B /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		0995C22E2C3BFD8E0049454E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0995C2302C3C0B1C0049454E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		0995C2332C3C0B5F0049454E /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
@@ -43,6 +47,8 @@
 		09AA3E162C395F600018C8B5 /* fetchBooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetchBooks.swift; sourceTree = "<group>"; };
 		09AA3E192C396A100018C8B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		09AA3E3D2C39D6F60018C8B5 /* FireStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreService.swift; sourceTree = "<group>"; };
+		2FEFD9BE2C3CEB3A00B90B77 /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
+		2FEFD9C02C3CEBA200B90B77 /* LibrarianRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarianRequestView.swift; sourceTree = "<group>"; };
 		4410BE222C3B02D60075AEEE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		4410BE242C3B03960075AEEE /* ProfilePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,6 +104,7 @@
 				4410BE222C3B02D60075AEEE /* HomeView.swift */,
 				4410BE242C3B03960075AEEE /* ProfilePage.swift */,
 				09AA3E0A2C395F3B0018C8B5 /* ContentView.swift */,
+				08371B0E2C3D0AEA004F6E8B /* Color.swift */,
 				09AA3E162C395F600018C8B5 /* fetchBooks.swift */,
 				09AA3E0C2C395F3D0018C8B5 /* Assets.xcassets */,
 				0995C2682C3C81C70049454E /* BookViewModel.swift */,
@@ -106,6 +113,8 @@
 				09AA3E3D2C39D6F60018C8B5 /* FireStoreService.swift */,
 				0995C2302C3C0B1C0049454E /* LoginView.swift */,
 				0995C23D2C3C10ED0049454E /* AuthenticationManager.swift */,
+				2FEFD9BE2C3CEB3A00B90B77 /* Requests.swift */,
+				2FEFD9C02C3CEBA200B90B77 /* LibrarianRequestView.swift */,
 			);
 			path = newApiFetch;
 			sourceTree = "<group>";
@@ -202,7 +211,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0995C2342C3C0B5F0049454E /* Global.swift in Sources */,
+				2FEFD9C12C3CEBA200B90B77 /* LibrarianRequestView.swift in Sources */,
 				4410BE252C3B03960075AEEE /* ProfilePage.swift in Sources */,
+				2FEFD9BF2C3CEB3A00B90B77 /* Requests.swift in Sources */,
+				08371B0F2C3D0AEA004F6E8B /* Color.swift in Sources */,
 				0995C2312C3C0B1C0049454E /* LoginView.swift in Sources */,
 				0995C23E2C3C10ED0049454E /* AuthenticationManager.swift in Sources */,
 				09AA3E0B2C395F3B0018C8B5 /* ContentView.swift in Sources */,
@@ -344,7 +356,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"newApiFetch/Preview Content\"";
-				DEVELOPMENT_TEAM = Z4C9267Z7G;
+				DEVELOPMENT_TEAM = AXU9XBM93S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = newApiFetch/Info.plist;
@@ -353,6 +365,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -374,7 +387,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"newApiFetch/Preview Content\"";
-				DEVELOPMENT_TEAM = Z4C9267Z7G;
+				DEVELOPMENT_TEAM = AXU9XBM93S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = newApiFetch/Info.plist;
@@ -383,6 +396,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

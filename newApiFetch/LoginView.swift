@@ -1,7 +1,6 @@
 import SwiftUI
 import FirebaseAuth
 
-
 @MainActor
 final class LoginPageViewModel: ObservableObject {
     @Published var email = ""
@@ -9,9 +8,19 @@ final class LoginPageViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var alertMessage = ""
     
+    // State properties for validation
+    @Published var emailError: String = ""
+    @Published var passwordError: String = ""
+    
+    init() {
+        // Initialize with any necessary setup
+        validateEmail()
+        validatePassword()
+    }
+    
     func signIn(isLoggedIn: Binding<Bool>) {
-        guard isValidEmail(email), isValidPassword(password) else {
-            alertMessage = "Email or password is not valid!"
+        guard emailError.isEmpty, passwordError.isEmpty else {
+            alertMessage = "Please correct the errors"
             showAlert = true
             return
         }
@@ -29,31 +38,63 @@ final class LoginPageViewModel: ObservableObject {
             }
         }
     }
+    
+     func validateEmail() {
+        let emailRegEx = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}(|edu.in)$"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        let allowedDomains = ["gmail.com", "yahoo.com", "outlook.com", "icloud.com", "hotmail.com", "aol.com"]
+        
+        if email.isEmpty {
+            emailError = ""
+        } else if !emailPredicate.evaluate(with: email) {
+            emailError = "Please enter valid email"
+        } else if let domain = email.split(separator: "@").last, !allowedDomains.contains(String(domain)) {
+            emailError = "Email must be from a valid provider"
+        } else {
+            // Check if email is already in use (if needed)
+            emailError = ""
+        }
+    }
+    
+     func validatePassword() {
+       if password.isEmpty {
+            passwordError = "password must not be empty"
+       } else if password.count > 6 {
+            passwordError = "password must 6 characters long!"
+       } else {
+           passwordError = ""
+       }
+    }
 }
+
+import SwiftUI
+
 struct LoginView: View {
     @StateObject private var loginPageViewModel = LoginPageViewModel()
-    @State private var isLoggedIn = false
+    
+    @EnvironmentObject var loginModel: LoginViewModel
     
     var body: some View {
         ZStack {
-            Color(hex: "FDF5E6")
+            Color(hex: "F7EEEB")
                 .edgesIgnoringSafeArea(.all)
             
             HStack {
                 VStack {
                     Spacer()
-                    Image("booksIllustration")
+                    Image("MainLogin")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .padding(.leading, 50)
                     Spacer()
                 }
-                .frame(width: UIScreen.main.bounds.width / 2)
-                Divider()
-                    .overlay(Color(hex: "5D4037"))
+//                .frame(width: UIScreen.main.bounds.width / 2)
+//                Divider()
+//                    .overlay(Color(hex: "5D4037"))
                 
                 VStack(spacing: 20) {
-                    Image("owlLogo")
+                    Image("BibloFi")
+//                        .padding(.top, 40)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)
@@ -82,6 +123,16 @@ struct LoginView: View {
                         .autocapitalization(.none)
                         .keyboardType(.emailAddress)
                         .padding(.horizontal, 40)
+                        .onChange(of: loginPageViewModel.email) { _, newValue in
+                            loginPageViewModel.validateEmail()
+                        }
+                    
+                    if !loginPageViewModel.emailError.isEmpty {
+                        Text(loginPageViewModel.emailError)
+                            .foregroundColor(.red)
+                            .font(.footnote)
+                            .padding(.horizontal, 40)
+                    }
                     
                     SecureField("Password", text: $loginPageViewModel.password)
                         .font(.custom("Avenir Next", size: 18))
@@ -90,9 +141,19 @@ struct LoginView: View {
                         .cornerRadius(10)
                         .shadow(color: Color.gray.opacity(0.4), radius: 5, x: 0, y: 2)
                         .padding(.horizontal, 40)
+                        .onChange(of: loginPageViewModel.password) { _, newValue in
+                            loginPageViewModel.validatePassword()
+                        }
+                    
+                    if !loginPageViewModel.passwordError.isEmpty {
+                        Text(loginPageViewModel.passwordError)
+                            .foregroundColor(.red)
+                            .font(.footnote)
+                            .padding(.horizontal, 40)
+                    }
                     
                     Button(action: {
-                        loginPageViewModel.signIn(isLoggedIn: $isLoggedIn)
+                        loginPageViewModel.signIn(isLoggedIn: $loginModel.isLoggedIn)
                     }) {
                         Text("Login")
                             .font(.custom("Avenir Next", size: 18))
@@ -100,12 +161,10 @@ struct LoginView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color(hex: "A0522D")) // Button Color
+                            .background(Color(hex: "9E6028")) // Button Color
                             .cornerRadius(10)
                             .padding(.horizontal, 40)
-                    }.fullScreenCover(isPresented: $isLoggedIn, content: {
-                        DashboardView()
-                    })
+                    }
                     
                     Spacer()
                 }
